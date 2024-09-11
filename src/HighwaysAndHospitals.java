@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Highways & Hospitals
@@ -18,10 +20,20 @@ public class HighwaysAndHospitals
      */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][])
     {
-
-        for (int num : getSurroundingCities(3, cities))
+        // If the highway cost is greater than a hospital, it'll always be cheaper just to build hospitals in every
+        // city. If it is equal, it is the same as building one hospital and roads to all surrounding cities.
+        // Either way, I can just return the number of cities * the hospital cost.
+        if (highwayCost >= hospitalCost)
         {
-            System.out.println(num);
+            return (long) n * hospitalCost;
+        }
+
+//        Queue<Integer> queue = new LinkedList<>();
+//        int totalCost = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+
         }
 
 
@@ -42,7 +54,7 @@ public class HighwaysAndHospitals
             {
                 if (citiesAr[i][j] == startingCity)
                 {
-                    // I did this Math.Abs trick here to always give me the other value relating to the target city
+                    // I did this Math.Abs trick here to always give me the corresponding value relating to the target city
                     // given that there are always 2 columns.
                     ar.add(citiesAr[i][Math.abs(j - 1)]);
                 }
