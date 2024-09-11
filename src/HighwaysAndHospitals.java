@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -28,8 +29,24 @@ public class HighwaysAndHospitals
             return (long) n * hospitalCost;
         }
 
-//        Queue<Integer> queue = new LinkedList<>();
-//        int totalCost = 0;
+        // Otherwise, this means the highways cost less than hospitals. This means the optimal approach is to place
+        // one hospital per cluster of cities connected by highways.
+
+
+        // 2D array of arraylists, [i][0] gives you the cluster index, and [0][j] gives you the cities in the cluster.
+        ArrayList<ArrayList<Integer>> cityClusters = getCityClusters(cities, n);
+
+
+        for (int i = 0; i < cityClusters.size(); i++)
+        {
+            for (int j = 0; j < cityClusters.get(i).size(); j++)
+            {
+                System.out.println("cluster: " + i + " City: " + cityClusters.get(i).get(j));
+            }
+        }
+
+
+        int totalCost = 0;
 
         for (int i = 0; i < n; i++)
         {
@@ -69,5 +86,40 @@ public class HighwaysAndHospitals
         }
 
         return newAr;
+    }
+
+    private static ArrayList<ArrayList<Integer>> getCityClusters(int[][] citiesAr, int numCities)
+    {
+        ArrayList<ArrayList<Integer>> cityClusters = new ArrayList<>();
+
+        int index = 0;
+
+        for (int i = 0; i < citiesAr.length; i++)
+        {
+            cityClusters.add(index, new ArrayList<>());
+            ArrayList<Integer> currentCluster = cityClusters.get(index);
+
+            for (int j = 0; j < citiesAr[0].length; j++)
+            {
+                int[] surroundingCities = getSurroundingCities(citiesAr[index][j], citiesAr);
+                for (int surroundingCity : surroundingCities)
+                {
+                    // Maybe make this into a helper function and do an if statement
+                    for (int l = 0; l < cityClusters.size(); l++)
+                    {
+                        if (cityClusters.get(l).contains(surroundingCity))
+                        {
+                            break;
+                        }
+                    }
+                    currentCluster.add(surroundingCity);
+                }
+            }
+            // If there are any cities left in the citiesArray that haven't been added to a cluster, do that.
+            index++;
+        }
+
+
+        return cityClusters;
     }
 }
