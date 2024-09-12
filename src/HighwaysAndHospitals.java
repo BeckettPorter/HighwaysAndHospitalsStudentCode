@@ -36,26 +36,25 @@ public class HighwaysAndHospitals
         // 2D array of arraylists, [i][0] gives you the cluster index, and [0][j] gives you the cities in the cluster.
         ArrayList<ArrayList<Integer>> cityClusters = getCityClusters(cities, n);
 
+        long totalCost = 0;
 
         for (int i = 0; i < cityClusters.size(); i++)
         {
             for (int j = 0; j < cityClusters.get(i).size(); j++)
             {
+                if (j == 1)
+                {
+                    totalCost += hospitalCost;
+                }
+                else
+                {
+                    totalCost += highwayCost;
+                }
                 System.out.println("cluster: " + i + " City: " + cityClusters.get(i).get(j));
             }
         }
 
-
-        int totalCost = 0;
-
-        for (int i = 0; i < n; i++)
-        {
-
-        }
-
-
-
-        return 0;
+        return totalCost;
     }
 
     // Helper method I made to give me the cities that directly connect to a given city.
@@ -105,14 +104,10 @@ public class HighwaysAndHospitals
                 for (int surroundingCity : surroundingCities)
                 {
                     // Maybe make this into a helper function and do an if statement
-                    for (int l = 0; l < cityClusters.size(); l++)
+                    if (!doesNestedArraylistContainCity(surroundingCity, cityClusters))
                     {
-                        if (cityClusters.get(l).contains(surroundingCity))
-                        {
-                            break;
-                        }
+                        currentCluster.add(surroundingCity);
                     }
-                    currentCluster.add(surroundingCity);
                 }
             }
             // If there are any cities left in the citiesArray that haven't been added to a cluster, do that.
@@ -121,5 +116,19 @@ public class HighwaysAndHospitals
 
 
         return cityClusters;
+    }
+
+    private static boolean doesNestedArraylistContainCity(int surroundingCity,
+                                                          ArrayList<ArrayList<Integer>> cityClusters)
+    {
+        boolean contains = false;
+        for (int l = 0; l < cityClusters.size(); l++)
+        {
+            if (cityClusters.get(l).contains(surroundingCity))
+            {
+                contains = true;
+            }
+        }
+        return contains;
     }
 }
