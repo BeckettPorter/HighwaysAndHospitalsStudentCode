@@ -13,10 +13,6 @@ import java.util.ArrayList;
 
 public class HighwaysAndHospitals
 {
-    /**
-     * TODO: Complete this function, cost(), to return the minimum cost to provide
-     *  hospital access for all citizens in Menlo County.
-     */
     public static long cost(int n, int hospitalCost, int highwayCost, int cities[][])
     {
         // If the highway cost is greater than a hospital, it'll always be cheaper just to build hospitals in every
@@ -31,7 +27,7 @@ public class HighwaysAndHospitals
         // one hospital per cluster of cities connected by highways.
 
         // 2D array of arraylists, [i][0] gives you the cluster index, and [0][j] gives you the cities in the cluster.
-        ArrayList<ArrayList<Integer>> cityClusters = getCityClusters(cities, n);
+        ArrayList<ArrayList<Integer>> cityClusters = getCityClusters(cities);
 
         long totalCost = 0;
 
@@ -50,13 +46,16 @@ public class HighwaysAndHospitals
             totalCost += (long) hospitalCost * Math.clamp((n - cityClusters.size() - 1), 1, Long.MAX_VALUE);
         }
 
-        System.out.println("NEW TEST");
+        System.out.println("------NEW TEST------");
 
+        // Go through a nested for loop of the cityClusters arrayList of arrayLists of Integers (that's a lot lol) and
+        // add a hospital to the first city and connect the rest with highways (since we know at this point that
+        // that hospitals cost more than highways so this is more cost-effective).
         for (int i = 0; i < cityClusters.size(); i++)
         {
             for (int j = 0; j < cityClusters.get(i).size(); j++)
             {
-                if (j == 1)
+                if (j == 0)
                 {
                     totalCost += hospitalCost;
                 }
@@ -71,7 +70,7 @@ public class HighwaysAndHospitals
     }
 
     // Helper method I made to give me the cities that directly connect to a given city.
-    private static int[] getSurroundingCities(int startingCity, int[][] citiesAr)
+    private static int[] getConnectedCities(int startingCity, int[][] citiesAr)
     {
         ArrayList<Integer> ar = new ArrayList<>();
 
@@ -100,7 +99,8 @@ public class HighwaysAndHospitals
         return newAr;
     }
 
-    private static ArrayList<ArrayList<Integer>> getCityClusters(int[][] citiesAr, int numCities)
+    // Helper method that returns an arrayList of arrayLists of Integers that represents the city clusters.
+    private static ArrayList<ArrayList<Integer>> getCityClusters(int[][] citiesAr)
     {
         ArrayList<ArrayList<Integer>> cityClusters = new ArrayList<>();
 
@@ -108,15 +108,20 @@ public class HighwaysAndHospitals
 
         for (int i = 0; i < citiesAr.length; i++)
         {
+            // Add a new arrayList to the cityClusters array to fill with a new cluster of cities.
             cityClusters.add(index, new ArrayList<>());
+
+            // Set an arrayList just for the current cluster equal to the new arrayList I just made for the cluster.
             ArrayList<Integer> currentCluster = cityClusters.get(index);
 
+            // For loop that runs for the # of columns in the cities array (always should be 2).
             for (int j = 0; j < citiesAr[0].length; j++)
             {
-                int[] surroundingCities = getSurroundingCities(citiesAr[index][j], citiesAr);
+                // Integer array of all the cities connected to the given city.
+                int[] surroundingCities = getConnectedCities(citiesAr[index][j], citiesAr);
                 for (int surroundingCity : surroundingCities)
                 {
-                    // Maybe make this into a helper function and do an if statement
+                    // Checks to make sure the city isn't already somewhere in the cityClusters array before adding it.
                     if (!doesNestedArraylistContainCity(surroundingCity, cityClusters))
                     {
                         currentCluster.add(surroundingCity);
@@ -127,10 +132,11 @@ public class HighwaysAndHospitals
             index++;
         }
 
-
         return cityClusters;
     }
 
+    // Helper method that returns a boolean indicating if the provided city appears anywhere
+    // in a nested array (any row or column).
     private static boolean doesNestedArraylistContainCity(int surroundingCity,
                                                           ArrayList<ArrayList<Integer>> cityClusters)
     {
