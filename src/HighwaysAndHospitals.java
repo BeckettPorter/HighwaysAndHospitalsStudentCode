@@ -140,14 +140,13 @@ public class HighwaysAndHospitals
     private static boolean doesNestedArraylistContainCity(int surroundingCity,
                                                           ArrayList<ArrayList<Integer>> cityClusters)
     {
-        boolean contains = false;
         for (int i = 0; i < cityClusters.size(); i++)
         {
             if (cityClusters.get(i).contains(surroundingCity))
             {
-                contains = true;
+                return true;
             }
         }
-        return contains;
+        return false;
     }
 }
