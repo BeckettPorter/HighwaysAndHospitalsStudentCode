@@ -1,7 +1,4 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Highways & Hospitals
@@ -11,6 +8,7 @@ import java.util.Queue;
  *
  * Completed by: Beckett Porter
  * Started on: 9/9/2024
+ * Completed on:
  */
 
 public class HighwaysAndHospitals
@@ -32,11 +30,27 @@ public class HighwaysAndHospitals
         // Otherwise, this means the highways cost less than hospitals. This means the optimal approach is to place
         // one hospital per cluster of cities connected by highways.
 
-
         // 2D array of arraylists, [i][0] gives you the cluster index, and [0][j] gives you the cities in the cluster.
         ArrayList<ArrayList<Integer>> cityClusters = getCityClusters(cities, n);
 
         long totalCost = 0;
+
+        // Check if the city clusters array is empty and just multiply n by hospital cost because I'd need to
+        // build hospitals on each of these non-connected cities. I probably could have figured out a way
+        // to do this without this if statement, but I couldn't figure it out.
+        if (cityClusters.isEmpty())
+        {
+            totalCost += (long) hospitalCost * n;
+        }
+        // Check for individual cities that do not connect to any other cities. Must build a hospital on each of these.
+        else if (n > cityClusters.size() + 1)
+        {
+            // I do this clamp to make sure it is at minimum 1 non-connected hospital because it wouldn't make sense
+            // for n to be larger than the cityClusters size if there isn't a non-connected city somewhere.
+            totalCost += (long) hospitalCost * Math.clamp((n - cityClusters.size() - 1), 1, Long.MAX_VALUE);
+        }
+
+        System.out.println("NEW TEST");
 
         for (int i = 0; i < cityClusters.size(); i++)
         {
@@ -53,7 +67,6 @@ public class HighwaysAndHospitals
                 System.out.println("cluster: " + i + " City: " + cityClusters.get(i).get(j));
             }
         }
-
         return totalCost;
     }
 
@@ -122,9 +135,9 @@ public class HighwaysAndHospitals
                                                           ArrayList<ArrayList<Integer>> cityClusters)
     {
         boolean contains = false;
-        for (int l = 0; l < cityClusters.size(); l++)
+        for (int i = 0; i < cityClusters.size(); i++)
         {
-            if (cityClusters.get(l).contains(surroundingCity))
+            if (cityClusters.get(i).contains(surroundingCity))
             {
                 contains = true;
             }
