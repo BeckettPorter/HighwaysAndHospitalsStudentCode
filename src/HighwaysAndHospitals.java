@@ -100,39 +100,60 @@ public class HighwaysAndHospitals
     }
 
     // Helper method that returns an arrayList of arrayLists of Integers that represents the city clusters.
-    private static ArrayList<ArrayList<Integer>> getCityClusters(int[][] citiesAr)
-    {
-        ArrayList<ArrayList<Integer>> cityClusters = new ArrayList<>();
+//    private static ArrayList<ArrayList<Integer>> getCityClusters(int[][] citiesAr)
+//    {
+//        ArrayList<ArrayList<Integer>> cityClusters = new ArrayList<>();
+//
+//        int index = 0;
+//
+//        for (int i = 0; i < citiesAr.length; i++)
+//        {
+//            // Add a new arrayList to the cityClusters array to fill with a new cluster of cities.
+//            cityClusters.add(index, new ArrayList<>());
+//
+//            // Set an arrayList just for the current cluster equal to the new arrayList I just made for the cluster.
+//            ArrayList<Integer> currentCluster = cityClusters.get(index);
+//
+//            // For loop that runs for the # of columns in the cities array (always should be 2).
+//            for (int j = 0; j < citiesAr[0].length; j++)
+//            {
+//                // Integer array of all the cities connected to the given city.
+//                int[] surroundingCities = getConnectedCities(citiesAr[index][j], citiesAr);
+//                for (int surroundingCity : surroundingCities)
+//                {
+//                    // Checks to make sure the city isn't already somewhere in the cityClusters array before adding it.
+//                    if (!doesNestedArraylistContainCity(surroundingCity, cityClusters))
+//                    {
+//                        currentCluster.add(surroundingCity);
+//                    }
+//                }
+//            }
+//            // If there are any cities left in the citiesArray that haven't been added to a cluster, do that.
+//            index++;
+//        }
+//
+//        return cityClusters;
+//    }
 
-        int index = 0;
+
+    private static int getNumCityClusters(int[][] citiesAr, int numCities)
+    {
+        // Index = city, number at index = parent of city, or if 0 then root
+        int[] unionMap = new int[citiesAr.length + 1];
 
         for (int i = 0; i < citiesAr.length; i++)
         {
-            // Add a new arrayList to the cityClusters array to fill with a new cluster of cities.
-            cityClusters.add(index, new ArrayList<>());
-
-            // Set an arrayList just for the current cluster equal to the new arrayList I just made for the cluster.
-            ArrayList<Integer> currentCluster = cityClusters.get(index);
-
-            // For loop that runs for the # of columns in the cities array (always should be 2).
-            for (int j = 0; j < citiesAr[0].length; j++)
+            if (unionMap[citiesAr[i][1]] == 0)
             {
-                // Integer array of all the cities connected to the given city.
-                int[] surroundingCities = getConnectedCities(citiesAr[index][j], citiesAr);
-                for (int surroundingCity : surroundingCities)
-                {
-                    // Checks to make sure the city isn't already somewhere in the cityClusters array before adding it.
-                    if (!doesNestedArraylistContainCity(surroundingCity, cityClusters))
-                    {
-                        currentCluster.add(surroundingCity);
-                    }
-                }
+                unionMap[i] = ;
             }
-            // If there are any cities left in the citiesArray that haven't been added to a cluster, do that.
-            index++;
+            else
+            {
+                while (unionMap[])
+            }
         }
 
-        return cityClusters;
+        return 0;
     }
 
     // Helper method that returns a boolean indicating if the provided city appears anywhere
