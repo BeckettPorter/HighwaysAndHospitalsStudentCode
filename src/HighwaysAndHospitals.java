@@ -57,7 +57,7 @@ public class HighwaysAndHospitals
         // Set each index to have -1 as the root initially
         for (int i = 0; i < numCities + 1; i++)
         {
-            unionMap[i] = -1;
+            unionMap[i] = i;
         }
 
         int numCluster = 0;
@@ -74,9 +74,9 @@ public class HighwaysAndHospitals
             }
         }
         // After that, go through unionMap and for each -1 in the array, that's an individual cluster
-        for (int i = 0; i < unionMap.length; i++)
+        for (int i = 1; i <= unionMap.length - 1; i++)
         {
-            if (unionMap[i] == -1)
+            if (unionMap[i] == i)
             {
                 numCluster++;
             }
@@ -89,7 +89,7 @@ public class HighwaysAndHospitals
     {
         int index = city;
 
-        while (map[index] != -1)
+        while (map[index] != index)
         {
             index = map[index];
         }
