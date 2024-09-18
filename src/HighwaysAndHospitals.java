@@ -66,25 +66,29 @@ public class HighwaysAndHospitals
         // For each edge
         for (int i = 0; i < citiesAr.length; i++)
         {
-            // TODO: Implement path compression.
             int city1Root = findCityRoot(citiesAr[i][0], unionMap);
             int city2Root = findCityRoot(citiesAr[i][1], unionMap);
 
+            // Get the order of root 1 and root 2 from the orderMap.
             int root1Order = orderMap[city1Root];
             int root2Order = orderMap[city2Root];
 
             // If the cities have different roots, connect them, taking into account weight balancing
             if (city1Root != city2Root)
             {
+                // Check which has a higher order and make that one the root.
                 if (root1Order > root2Order)
                 {
                     unionMap[city2Root] = city1Root;
-                    orderMap[city2Root] = root1Order + root2Order + 1;
+                }
+                else if (root2Order > root1Order)
+                {
+                    unionMap[city1Root] = city2Root;
                 }
                 else
                 {
-                    unionMap[city1Root] = city2Root;
-                    orderMap[city1Root] = root1Order + root2Order + 1;
+                    unionMap[city2Root] = city1Root;
+                    orderMap[city1Root] = root1Order + 1;
                 }
             }
         }
@@ -107,6 +111,14 @@ public class HighwaysAndHospitals
         while (map[index] != index)
         {
             index = map[index];
+        }
+
+        // Path compression
+        while (map[city] != city)
+        {
+            int temp = map[city];
+            map[city] = map[index];
+            city = temp;
         }
         return index;
     }
