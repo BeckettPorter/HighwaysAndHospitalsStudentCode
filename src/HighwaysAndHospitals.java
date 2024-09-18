@@ -53,8 +53,9 @@ public class HighwaysAndHospitals
     {
         // Index = city, number at index = parent of city, or if 0 then root
         int[] unionMap = new int[numCities + 1];
+        int[] orderMap = new int[numCities + 1];
 
-        // Set each index to have -1 as the root initially
+        // Set each index to have themselves as the root initially
         for (int i = 0; i < numCities + 1; i++)
         {
             unionMap[i] = i;
@@ -62,18 +63,32 @@ public class HighwaysAndHospitals
 
         int numCluster = 0;
 
+        // For each edge
         for (int i = 0; i < citiesAr.length; i++)
         {
+            // TODO: Implement path compression.
             int city1Root = findCityRoot(citiesAr[i][0], unionMap);
             int city2Root = findCityRoot(citiesAr[i][1], unionMap);
 
-            // If the cities have different roots, connect them
+            int root1Order = orderMap[city1Root];
+            int root2Order = orderMap[city2Root];
+
+            // If the cities have different roots, connect them, taking into account weight balancing
             if (city1Root != city2Root)
             {
-                unionMap[city1Root] = city2Root;
+                if (root1Order > root2Order)
+                {
+                    unionMap[city2Root] = city1Root;
+                    orderMap[city2Root] = root1Order + root2Order + 1;
+                }
+                else
+                {
+                    unionMap[city1Root] = city2Root;
+                    orderMap[city1Root] = root1Order + root2Order + 1;
+                }
             }
         }
-        // After that, go through unionMap and for each -1 in the array, that's an individual cluster
+        // After that, go through unionMap and for each root in the array, that's an individual cluster
         for (int i = 1; i <= unionMap.length - 1; i++)
         {
             if (unionMap[i] == i)
