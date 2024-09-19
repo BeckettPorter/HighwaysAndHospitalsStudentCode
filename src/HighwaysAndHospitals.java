@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * Completed by: Beckett Porter
  * Started on: 9/9/2024
- * Completed on:
+ * Completed on: 9/19/2024
  */
 
 public class HighwaysAndHospitals
@@ -35,7 +35,7 @@ public class HighwaysAndHospitals
         {
             return (long) hospitalCost * n;
         }
-
+        // Otherwise, build one hospital per cluster and build highways to connect to every other city.
         for (int i = 0; i < clusterNum; i++)
         {
             totalCost += hospitalCost;
@@ -48,11 +48,12 @@ public class HighwaysAndHospitals
         return totalCost;
     }
 
-
+    // Helper method which uses union find to return the number of city clusters.
     private static int getNumCityClusters(int[][] citiesAr, int numCities)
     {
-        // Index = city, number at index = parent of city, or if 0 then root
+        // Index = city, number at index = parent of city
         int[] unionMap = new int[numCities + 1];
+
         int[] orderMap = new int[numCities + 1];
 
         // Set each index to have themselves as the root initially
@@ -61,7 +62,7 @@ public class HighwaysAndHospitals
             unionMap[i] = i;
         }
 
-        int numCluster = 0;
+        int numClusters = 0;
 
         // For each edge
         for (int i = 0; i < citiesAr.length; i++)
@@ -76,7 +77,7 @@ public class HighwaysAndHospitals
             // If the cities have different roots, connect them, taking into account weight balancing
             if (city1Root != city2Root)
             {
-                // Check which has a higher order and make that one the root.
+                // Check which has a higher order and make that one the root. (Weight balancing)
                 if (root1Order > root2Order)
                 {
                     unionMap[city2Root] = city1Root;
@@ -97,10 +98,10 @@ public class HighwaysAndHospitals
         {
             if (unionMap[i] == i)
             {
-                numCluster++;
+                numClusters++;
             }
         }
-        return numCluster;
+        return numClusters;
     }
 
     // Helper method that returns the root of the city
